@@ -2,16 +2,19 @@
 
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        $message = $_POST['messages'];
-        $showlocation = $_POST['showlocation'];
-        $id = $_POST['id'];
-        
+        $client_ID = $_POST['client_ID'];
+        $handwasher_lspid = $_POST['handwasher_lspid'];
+        $trans_No = $_POST['trans_No'];
+        $rating = $_POST['rating'];
+        $comments = $_POST['comments'];
+        $date = date('Y-m-d');
         require_once ("db_connect.php");
             
-            $db = DB::transact_db( "INSERT INTO client_post(client_ID, post_message, post_show_location)
+            $db = DB::transact_db( "INSERT INTO rating_handwasher
+            (client_ID, lsp_ID, trans_No, rating_Score, rating_Comment, rating_Date)
                  values
-                 (? ,?, ?)",
-                 array($id,$message,$showlocation),
+                 (? ,?, ?, ? ,?, ?)",
+                 array($client_ID, $handwasher_lspid, $trans_No, $rating, $comments, $date),
                  "INSERT"
             );
             if($db)

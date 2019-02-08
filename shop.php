@@ -1,27 +1,21 @@
 <?php
 error_reporting(E_ALL);
-if(!isset($_POST['client_id'])) {
-    $result['success'] = "0";
-    $result['message'] = "error";
-    echo json_encode($result);
-    exit;
- } else {
-     $client_id = $_POST['client_id'];
- }
+
     require_once ("db_connect.php");
     $result = array();
-    $result['category'] = array();
-        $db = DB::transact_db("SELECT *  FROM category where client_ID = ? ORDER BY category_No ",
-								array($client_id),
+    $result['shopBookings'] = array();
+        $db = DB::transact_db("SELECT CONCAT(client_FName, ' ', client_MidName, ' ', client_LName) AS client_Name, client_Address, client_Contact from laundry_client",
+								array(),
 								"SELECT"
                             );
         if(count($db) > 0) {
             foreach($db as $dbs){
       
-            $index['id'] = $dbs['category_No'];
-            $index['name'] = $dbs['category_Name'];
-
-            array_push($result['category'], $index); }
+            $index['clientName'] = $dbs['client_Name'];
+            $index['clientAddress'] = $dbs['client_Address'];
+            $index['clientContact'] = $dbs['client_Contact'];
+            
+            array_push($result['shopBookings'], $index); }
             $result['success'] = "1";
             $result['message'] = "success"; 
             echo json_encode($result);

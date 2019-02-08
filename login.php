@@ -60,6 +60,7 @@ error_reporting(E_ALL);
             $index3['name'] = $db3['name'];
             $index3['user'] = "Laundry Shop";
             $index3['id'] = $db3['shop_ID'];
+            $index2['lspid'] = $db2['lsp_ID'];
             array_push($result['login'], $index3);
             $result['success'] = "1";
             $result['message'] = "success";

@@ -8,7 +8,7 @@
         
         require_once ("db_connect.php");
             
-            $db = DB::transact_db( "INSERT INTO client_post(client_ID, post_message, post_show_location)
+            $db = DB::transact_db( "INSERT INTO handwasher_post(handwasher_ID, handwasher_message, handwasher_show_location)
                  values
                  (? ,?, ?)",
                  array($id,$message,$showlocation),

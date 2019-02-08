@@ -5,33 +5,17 @@ error_reporting(E_ALL);
     $result = array();
     //$result['allpostclient'] = array();
    $result['allhandwasherpost'] = array();
-        $db = DB::transact_db("SELECT TIMESTAMPDIFF(MINUTE,p.post_datetime,CURRENT_TIMESTAMP)as minute, p.post_no, p.post_message, p.post_showAddress, p.client_id, CONCAT(lc.client_fname, ' ', lc.client_midname, ' ', lc.client_lname) AS name   FROM postclient p, laundryclient lc
-        where p.client_id = lc.client_id",
-								array(),
-								"SELECT"
-                            );
-        $db2 = DB::transact_db("SELECT TIMESTAMPDIFF(MINUTE,p.post_datetime,CURRENT_TIMESTAMP)as minute, p.post_no, p.post_message, p.post_showAddress, p.handwasher_id, CONCAT(hw.handwasher_fname, ' ', hw.handwasher_midname, ' ', hw.handwasher_lname) AS name  FROM posthandwasher p , laundryhandwasher hw 
-                                where p.handwasher_id = hw.handwasher_id",
+        $db2 = DB::transact_db("SELECT TIMESTAMPDIFF(MINUTE,p.handwasher_date,CURRENT_TIMESTAMP)as minute, p.post_handwasher_no, p.handwasher_message, p.handwasher_show_location, p.handwasher_ID, CONCAT(hw.handwasher_FName, ' ', hw.handwasher_MidName, ' ', hw.handwasher_LName) AS name  FROM handwasher_post p , laundry_handwasher hw 
+                                where p.handwasher_ID = hw.handwasher_ID",
                             array(),
                             "SELECT"
                         );
         if(count($db2) > 0) {
             foreach($db2 as $dbs){
-            $index['post_no'] = $dbs['post_no'];
-            $index['post_message'] = $dbs['post_message'];
+            $index['post_no'] = $dbs['post_handwasher_no'];
+            $index['post_message'] = $dbs['handwasher_message'];
             $index['post_datetime'] = $dbs['minute'];
-            $index['post_showAddress'] = $dbs['post_showAddress'];
-            $index['poster_name'] = $dbs['name'];
-            array_push($result['allhandwasherpost'], $index); 
-            }
-        } 
-        if(count($db) > 0) {
-            foreach($db as $dbs){
-      
-            $index['post_no'] = $dbs['post_no'];
-            $index['post_message'] = $dbs['post_message'];
-            $index['post_datetime'] = $dbs['minute'];
-            $index['post_showAddress'] = $dbs['post_showAddress'];
+            $index['post_showAddress'] = $dbs['handwasher_show_location'];
             $index['poster_name'] = $dbs['name'];
             array_push($result['allhandwasherpost'], $index); 
             }
