@@ -28,6 +28,7 @@ error_reporting(E_ALL);
                 $index['handwasher_Contact'] = $dbs['handwasher_Contact'];
                 $index['handwasher_Username'] = $dbs['handwasher_Username'];
                 $index['handwasher_Password'] = $dbs['handwasher_Password'];
+                $index['handwasher_Photo'] = $dbs['handwasher_Photo'];
                 $index['handwasher_ID'] = $dbs['handwasher_ID'];
                 array_push($result['handwasher'], $index); }
                 $result['success'] = "1";

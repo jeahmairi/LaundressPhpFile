@@ -26,41 +26,44 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                         array($lsp_id),
                         "SELECT"
                         );
-                      
-        if(count($db3) > 0) {
-            foreach($db3 as $dbs){
-            $index['id'] = $dbs['service_No'];
-            $index['lsp_ID'] = $dbs['lsp_ID'];
-            $index['name'] = $dbs['service_Type'];
-            $index['label'] = $dbs['service_Label'];
-            $index['price'] = $dbs['service_Price'];
-            array_push($result['allhandwasherservice'], $index); 
-            }
-        }        
         if(count($db2) > 0) {
             foreach($db2 as $dbs){
             $index['id'] = $dbs['extraserv_ID'];
             $index['lsp_ID'] = $dbs['lsp_ID'];
             $index['name'] = $dbs['extra_service_name'];
+            $index['price'] = $dbs['extra_service_price'];
+            $index['uom'] = $dbs['extra_service_uom'];
             array_push($result['allhandwasherservice'], $index); 
             }
         } 
-        if(count($db) > 0) {
-            foreach($db as $dbs){
+        if(count($db) > 0)
+        foreach($db as $dbs){ {
             $index['id'] = $dbs['seroffer_ID'];
             $index['lsp_ID'] = $dbs['lsp_ID'];
             $index['name'] = $dbs['service_offered_name'];
+            $index['price'] = $dbs['service_offered_price'];
+            $index['uom'] = $dbs['service_offered_uom'];
+            array_push($result['allhandwasherservice'], $index); 
+            }
+            
+           
+        }             
+        if(count($db3) > 0) {
+            foreach($db3 as $dbs){
+            $index['id'] = $dbs['service_No'];
+            $index['lsp_ID'] = $dbs['lsp_ID'];
+            $index['name'] = $dbs['service_Type'];
             array_push($result['allhandwasherservice'], $index); 
             }
             $result['success'] = "1";
             $result['message'] = "success"; 
-            echo json_encode($result);
-        } 
+             echo json_encode($result);
+        }        
        else {
             $result['success'] = "0";
             $result['message'] = "error";
             echo json_encode($result);
             exit;
        }
-   }
+    }
 ?>

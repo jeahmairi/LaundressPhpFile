@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             foreach($db as $dbs){
             $index['trans_No'] = $dbs['trans_No'];
             $index['client_ID'] = $dbs['client_ID'];
+            $index['client_Photo'] = $dbs['client_Photo'];
             $index['lsp_ID'] = $dbs['lsp_ID']; 
             $index['name'] = $dbs['name'];
             $index['client_Address'] = $dbs['client_Address']; 

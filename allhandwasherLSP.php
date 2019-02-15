@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     require_once ("db_connect.php");
     $result = array();
     $result['allhandwasher'] = array();
-        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lsp.lsp_ID as lsp_ID FROM laundry_handwasher lh, laundry_service_provider lsp where lh.handwasher_ID = lsp.handwasher_ID AND lsp.lsp_id = ? ORDER BY lh.handwasher_id",
+        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lsp.lsp_ID as lsp_ID, AVG(rh.rating_Score) as rate FROM laundry_handwasher lh, laundry_service_provider lsp, rating_handwasher rh where lh.handwasher_ID = lsp.handwasher_ID AND rh.lsp_ID = lsp.lsp_ID AND lsp.lsp_id = ? ORDER BY lh.handwasher_id",
 								array($lsp_id),
 								"SELECT"
                             );
@@ -25,6 +25,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $index['address'] = $dbs['handwasher_Address'];
             $index['contact'] = $dbs['handwasher_Contact'];
             $index['age'] = $dbs['age'];
+            if($dbs['rate']==null){
+                $index['rate'] = 0.0;
+            } else{
+                $index['rate'] = $dbs['rate'];
+            }
+            
             $index['civilstat'] = $dbs['handwasher_CivilStatus'];
             $index['lspid'] = $dbs['lsp_ID'];
             array_push($result['allhandwasher'], $index); }

@@ -23,6 +23,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $index['id'] = $dbs['extraserv_ID'];
             $index['lsp_id'] = $dbs['lsp_ID'];
             $index['extra_service_name'] = $dbs['extra_service_name'];
+            $index['extra_service_price'] = $dbs['extra_service_price'];
+            $index['extra_service_uom'] = $dbs['extra_service_uom'];
             array_push($results['allhandwasherextraservice'], $index); }
             $results['success'] = "1";
             $results['message'] = "success"; 

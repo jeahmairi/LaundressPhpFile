@@ -10,18 +10,19 @@
         $bdate =  $_POST['bdate'];
        
         $gender = $_POST['gender'];
+        $cvstat = $_POST['cvstat'];
         $phonenumber = $_POST['phonenumber'];
-        if(!isset($_POST['client_id'])) {
+        
+        $profilepic =  $_POST['profilepic'];
+        if(!isset($_POST['handwasher_id'])) {
             $result['success'] = "0";
             $result['message'] = "error";
             echo json_encode($result);
             exit;
         } else {
-            $client_id = $_POST['client_id'];
+            $handwasher_id = $_POST['handwasher_id'];
         }
-        $profilepic =  $_POST['profilepic'];
-
-        $path = "image_client/".$fname."_".$lname.".jpeg";
+        $path = "handwasher_image/".$fname."_".$lname.".jpeg";
         $finalPath = "http://192.168.254.117/laundress/".$path;
 
        /*  $originalImgName= $_FILES['profilepic']['name'];
@@ -30,9 +31,9 @@
         $url = "http://192.168.254.117/laundress/".$folder."/".$originalImgName; */
 
         require_once ("db_connect.php");
-        $db = DB::transact_db( "UPDATE laundry_client SET 
-            client_FName = ?, client_MidName = ?, client_LName = ?, client_Address = ?, client_BDate = ?, client_Gender = ?, client_Contact = ?, client_Photo = ? WHERE client_ID = ?",
-            array($fname, $midname, $lname, $addr, $bdate, $gender, $phonenumber, $finalPath, $client_id),
+        $db = DB::transact_db( "UPDATE laundry_handwasher SET 
+            handwasher_FName = ?, handwasher_MidName = ?, handwasher_LName = ?, handwasher_Address = ?, handwasher_BDate = ?, handwasher_Gender = ?, handwasher_CivilStatus = ?, handwasher_Contact = ?, handwasher_Photo = ? WHERE handwasher_ID = ?",
+            array($fname, $midname, $lname, $addr, $bdate, $gender, $cvstat, $phonenumber, $finalPath, $handwasher_id),
             "UPDATE"
             );
         if (file_put_contents( $path, base64_decode($profilepic))) {

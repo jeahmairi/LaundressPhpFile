@@ -27,6 +27,7 @@ error_reporting(E_ALL);
                 $index['client_contact'] = $dbs['client_Contact'];
                 $index['client_email'] = $dbs['client_Email'];
                 $index['client_password'] = $dbs['client_Password'];
+                $index['client_Photo'] = $dbs['client_Photo'];
                 $index['client_id'] = $dbs['client_ID'];
                 array_push($result['laundryclient'], $index); }
                 $result['success'] = "1";

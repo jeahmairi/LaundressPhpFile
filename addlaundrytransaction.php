@@ -18,23 +18,6 @@
          } else {
              $client_id = $_POST['client_id'];
          }
-         if(!isset($_POST['serviceoff'])) {
-            $result['success'] = "0";
-            $result['message'] = "error";
-            echo json_encode($result);
-            exit;
-         } else {
-             $serviceoff = $_POST['serviceoff'];
-         }
-
-         if(!isset($_POST['extraservice'])) {
-            $result['success'] = "0";
-            $result['message'] = "error";
-            echo json_encode($result);
-            exit;
-         } else {
-             $extraservice = $_POST['extraservice'];
-         }
          if(!isset($_POST['service'])) {
             $result['success'] = "0";
             $result['message'] = "error";
@@ -65,13 +48,17 @@
         $last_trans_No = 0;
         $transstat = '';
         require_once ("db_connect.php");
+        $serviceoff = json_decode($_POST['serviceoff'], true);
+        $extraservice = json_decode($_POST['extraserve'], true);
+
         $db = DB::transact_db( "INSERT INTO laundry_transaction
-        (client_ID, lsp_ID, trans_Service, trans_ExtService, trans_ServiceType, trans_EstWeight, trans_EstDateTime, trans_DateOfRequest, trans_Status)
+        (client_ID, lsp_ID, trans_EstWeight, trans_EstDateTime, trans_DateOfRequest, trans_Status)
         values
-        (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        array($client_id, $lsp_id, $serviceoff, $extraservice, $service, $weight, $estdatetime, $date,'Pending'),
+        (?, ?, ?, ?, ?, ?)",
+        array($client_id, $lsp_id, $weight, $estdatetime, $date,'Pending'),
         "INSERT"
         );
+
         $db2 = DB::transact_db("SELECT LAST_INSERT_ID(trans_No) as last_trans_No, trans_Status from laundry_transaction",
         array(),
         "SELECT"
@@ -88,13 +75,42 @@
                  array($last_trans_No, $lsp_id),
                  "UPDATE"
             );
-        $db = DB::transact_db( "INSERT INTO notification
+        $db4 = DB::transact_db( "INSERT INTO notification
             (client_ID, lsp_ID, trans_No, notification_Message)
             values
             (?, ?, ?, ?)",
             array($client_id, $lsp_id, $last_trans_No, $transstat),
             "INSERT"
             );
+
+        foreach($serviceoff as $serviceoffs){
+            $db5 = DB::transact_db( "INSERT INTO laundry_service
+                (seroffer_ID, service_No, trans_No)
+                values
+                (?, ?, ?)",
+                array($serviceoffs['serviceoffered'], $service, $last_trans_No),
+                "INSERT"
+                );
+        }
+
+        $db2s = DB::transact_db("SELECT * FROM `laundry_service`where trans_No = ? ",
+                            array($last_trans_No),
+                            "SELECT"
+                                );
+        if(count($db2s) > 0) {
+            $id = 0;
+            foreach($db2s as $db2ss){
+                $id = $db2ss['laundservice_no'];
+               
+            }
+            foreach($extraservice as $xtraserve){
+                DB::transact_db("update laundry_service set extraserv_ID = ? where laundservice_no = ?",
+                array($xtraserve['xtraserve'], $id),
+                "UPDATE");
+            }
+        }
+        
+
         if($db)
         {
             $result["success"] = "1";

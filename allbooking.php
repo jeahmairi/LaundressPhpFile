@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             $index['lsp_ID'] = $dbs['lsp_ID']; 
             $index['shop_ID'] = $dbs['shop_ID']; 
             $index['handwasher_ID'] = $dbs['handwasher_ID']; 
-            $index['trans_Service'] = $dbs['trans_Service']; 
+            /* $index['trans_Service'] = $dbs['trans_Service']; 
             $index['trans_ExtService'] = $dbs['trans_ExtService']; 
-            $index['trans_ServiceType'] = $dbs['trans_ServiceType'];
+            $index['trans_ServiceType'] = $dbs['trans_ServiceType']; */
             $index['trans_EstWeight'] = $dbs['trans_EstWeight'];
             $index['trans_EstDateTime'] = $dbs['trans_EstDateTime'];
             $index['trans_DateOfRequest'] = $dbs['trans_DateOfRequest'];
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                 );
                 if(count($db3)>0){
                     foreach($db3 as $db3s){
-                    $index['handwasher_LName'] = $db3s['handwasher_LName']; 
+                    $index['handwasher_LName'] = $db3s['handwasher_FName']." ".$db3s['handwasher_MidName']." ".$db3s['handwasher_LName']; 
                     $index['handwasher_Address'] = $db3s['handwasher_Address']; 
                     $index['handwasher_Contact'] = $db3s['handwasher_Contact']; 
                     $index['shop_Name'] = ""; 

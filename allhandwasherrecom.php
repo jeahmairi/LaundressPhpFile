@@ -4,7 +4,7 @@ error_reporting(E_ALL);
     require_once ("db_connect.php");
     $result = array();
     $result['allhandwasher'] = array();
-        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lh.handwasher_Photo, lsp.lsp_ID as lsp_ID FROM laundry_handwasher lh, laundry_service_provider lsp where lh.handwasher_ID = lsp.handwasher_ID ORDER BY lh.handwasher_id",
+        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lsp.lsp_ID as lsp_ID, AVG(rh.rating_No) as average FROM laundry_handwasher lh, laundry_service_provider lsp, rating_handwasher rh where lh.handwasher_ID = lsp.handwasher_ID and rh.lsp_ID = lsp.lsp_ID ORDER BY average",
 								array(),
 								"SELECT"
                             );
@@ -17,7 +17,6 @@ error_reporting(E_ALL);
             $index['contact'] = $dbs['handwasher_Contact'];
             $index['age'] = $dbs['age'];
             $index['civilstat'] = $dbs['handwasher_CivilStatus'];
-            $index['photo'] = $dbs['handwasher_Photo'];
             $index['lspid'] = $dbs['lsp_ID'];
             array_push($result['allhandwasher'], $index); }
             $result['success'] = "1";

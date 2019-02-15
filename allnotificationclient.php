@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $result = array();
     $shop_ID=0;
     $handwasher_ID=0;
+    $rate_no = '';
     $result['allbooking'] = array();
         $db = DB::transact_db("SELECT * from notification lt, laundry_service_provider lsp where lt.client_ID = ? and lt.lsp_ID = lsp.lsp_ID Order by lt.notification_No DESC",
 								array($client_id ),
@@ -55,20 +56,22 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                     }
                 }
             }
-            $db4 = DB::transact_db("SELECT * FROM rating where client_ID = ?",
-            array($client_id),
-            "SELECT"
-            );
-            if(count($db4)>0){
-                foreach($db4 as $db4s){
-                $index['rating_No'] = $db4s['rating_No']; 
-                $index['rating_Score'] = $db4s['rating_Score']; 
-                $index['rating_Comment'] = $db4s['rating_Comment']; 
-                $index['rating_Date'] = $db4s['rating_Date']; 
-                //$index['shop_ContactNo1'] = $db3s['trans_ExtService']; 
-                }
+            $rate_no = $dbs['rating_No'];
+            if($rate_no!=0 && $dbs['notification_Message']=="Finished"){
+                $db4 = DB::transact_db("SELECT * from rating where rating_No =?",
+                    array($rate_no),
+                    "SELECT"
+                );
+                if(count($db4)>0){
+                    foreach($db4 as $db4s){
+                        $index['rating_No'] = $db4s['rating_No']; 
+                        $index['rating_Score'] = $db4s['rating_Score']; 
+                        $index['rating_Comment'] = $db4s['rating_Comment']; 
+                        $index['rating_Date'] = $db4s['rating_Date']; 
+                        
+                    }
             }
-            $handwasher_ID = $dbs['handwasher_ID'];
+            }
             array_push($result['allbooking'], $index); 
         }
             $result['success'] = "1";
@@ -81,6 +84,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             echo json_encode($result);
             exit;
        }
-   }
+  }
 
 ?>

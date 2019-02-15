@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $shop_ID=0;
     $handwasher_ID=0;
     $result['allbooking'] = array();
-        $db = DB::transact_db("SELECT * from laundry_transaction lt, laundry_service_provider lsp where lt.trans_Status ='Accepted' and lt.lsp_ID = ? and lt.lsp_ID = lsp.lsp_ID",
+        $db = DB::transact_db("SELECT * from laundry_transaction lt, laundry_service_provider lsp, laundry_client lc,  laundry_service ls, service s, services_offered so, extra_services es where lt.trans_Status ='Accepted' and lt.lsp_ID = ? and lt.lsp_ID = lsp.lsp_ID and lt.client_ID = lc.client_ID and lt.trans_No = ls.trans_No and ls.seroffer_ID = so.seroffer_ID and ls.service_No = s.service_No and ls.extraserv_ID = es.extraserv_ID",
 								array($lsp_id ),
 								"SELECT"
                             );
@@ -23,10 +23,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             $index['trans_No'] = $dbs['trans_No'];
             $index['client_ID'] = $dbs['client_ID'];
             $index['lsp_ID'] = $dbs['lsp_ID'];  
+            $index['name'] = $dbs['client_FName']." ".$dbs['client_MidName']." ".$dbs['client_LName']; 
+            $index['client_Photo'] = $dbs['client_Photo'];
             $index['handwasher_ID'] = $dbs['handwasher_ID']; 
-            $index['trans_Service'] = $dbs['trans_Service']; 
-            $index['trans_ExtService'] = $dbs['trans_ExtService']; 
-            $index['trans_ServiceType'] = $dbs['trans_ServiceType'];
+            $index['trans_Service'] = $dbs['service_offered_name']; 
+            $index['trans_ExtService'] = $dbs['extra_service_name']; 
+            $index['trans_ServiceType'] = $dbs['service_Type'];
             $index['trans_EstWeight'] = $dbs['trans_EstWeight'];
             $index['trans_EstDateTime'] = $dbs['trans_EstDateTime'];
             $index['trans_DateOfRequest'] = $dbs['trans_DateOfRequest'];
@@ -40,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                 );
                 if(count($db3)>0){
                     foreach($db3 as $db3s){
-                    $index['handwasher_LName'] = $db3s['handwasher_LName']; 
                     $index['handwasher_Address'] = $db3s['handwasher_Address']; 
                     $index['handwasher_Contact'] = $db3s['handwasher_Contact']; 
                     //$index['shop_ContactNo1'] = $db3s['trans_ExtService']; 
