@@ -21,7 +21,7 @@
         }
         $profilepic =  $_POST['profilepic'];
 
-        $path = "image_client/".$fname."_".$lname.".jpeg";
+        $path = "image_client/".$lname.".jpeg";
         $finalPath = "http://192.168.254.117/laundress/".$path;
 
        /*  $originalImgName= $_FILES['profilepic']['name'];

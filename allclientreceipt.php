@@ -1,21 +1,16 @@
 <?php
 error_reporting(E_ALL);
-if ($_SERVER['REQUEST_METHOD']=='POST') {
-    if(!isset($_POST['client_id'])) {
-       $result['success'] = "0";
-       $result['message'] = "error";
-       echo json_encode($result);
-       exit;
-    } else {
-        $client_id = $_POST['client_id'];
-    }
+
+    $trans_No = $_POST['trans_No'];
     require_once ("db_connect.php");
     $result = array();
     $shop_ID=0;
     $handwasher_ID=0;
-    $result['allbooking'] = array();
-        $db = DB::transact_db("SELECT * from laundry_transaction lt, laundry_service_provider lsp where lt.client_ID = ? and lt.lsp_ID = lsp.lsp_ID",
-								array($client_id),
+    $price = 0;
+    $extraprice = 0;
+    $result['allreceipt'] = array();
+        $db = DB::transact_db("SELECT *, CONCAT(lc.client_FName, ' ' ,lc.client_MidName, ' ', lc.client_LName) as name FROM receipt r, laundry_service_provider lsp, laundry_client lc, laundry_transaction lt, laundry_service ls where r.trans_No = ? and r.lsp_ID = lsp.lsp_ID and r.client_ID = lc.client_ID and r.trans_No = lt.trans_No and lt.trans_No = ls.trans_No",
+								array($trans_No),
 								"SELECT"
                             );
         if(count($db) > 0) {
@@ -23,15 +18,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             $index['trans_No'] = $dbs['trans_No'];
             $index['client_ID'] = $dbs['client_ID'];
             $index['lsp_ID'] = $dbs['lsp_ID']; 
-            $index['shop_ID'] = $dbs['shop_ID']; 
-            $index['handwasher_ID'] = $dbs['handwasher_ID']; 
-            /* $index['trans_Service'] = $dbs['trans_Service']; 
-            $index['trans_ExtService'] = $dbs['trans_ExtService']; 
-            $index['trans_ServiceType'] = $dbs['trans_ServiceType']; */
-            $index['trans_EstWeight'] = $dbs['trans_EstWeight'];
+            $index['trans_EstWeight'] = $dbs['trans_EstWeight']; 
             $index['trans_EstDateTime'] = $dbs['trans_EstDateTime'];
             $index['trans_DateOfRequest'] = $dbs['trans_DateOfRequest'];
             $index['trans_Status'] = $dbs['trans_Status'];
+            $index['name'] = $dbs['name'];
             $shop_ID= $dbs['shop_ID'];
             $handwasher_ID = $dbs['handwasher_ID']; 
             if($shop_ID!=0){
@@ -41,10 +32,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                 );
                 if(count($db2)>0){
                     foreach($db2 as $db2s){
-                    $index['name'] = $db2s['shop_Name']; 
-                    $index['address'] = $db2s['shop_Address']; 
-                    $index['contact'] = $db2s['shop_ContactNo1']; 
-                    $index['table'] = "Shop";
+                    $index['washer_name'] = $db2s['shop_Name']; 
                     }
                 }
             } else if($handwasher_ID!=0){
@@ -54,16 +42,14 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                 );
                 if(count($db3)>0){
                     foreach($db3 as $db3s){
-                    $index['name'] = $db3s['handwasher_FName']." ".$db3s['handwasher_MidName']." ".$db3s['handwasher_LName']; 
-                    $index['address'] = $db3s['handwasher_Address']; 
-                    $index['contact'] = $db3s['handwasher_Contact']; 
-                    $index['table'] = "Handwasher";
+                    $index['washer_name'] = $db3s['handwasher_FName']." ".$db3s['handwasher_MidName']." ".$db3s['handwasher_LName']; 
                     //$index['shop_ContactNo1'] = $db3s['trans_ExtService']; 
                     }
                 }
             }
-            //$handwasher_ID = $dbs['handwasher_ID'];
-            array_push($result['allbooking'], $index); 
+            $index['prices'] = $dbs['receipt_AmountToPay'];  
+            $index['date'] = $dbs['date_Issued'];          
+            array_push($result['allreceipt'], $index); 
         }
             $result['success'] = "1";
             $result['message'] = "success"; 
@@ -75,6 +61,5 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             echo json_encode($result);
             exit;
        }
-  }
 
 ?>

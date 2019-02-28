@@ -1,60 +1,74 @@
 <?php
 error_reporting(E_ALL);
-if ($_SERVER['REQUEST_METHOD']=='POST') {
-    if(!isset($_POST['client_id'])) {
-       $result['success'] = "0";
+if ($_SERVER['REQUEST_METHOD']=='POST') 
+{
+     if(!isset($_POST['client_id'])) {
+        $result['success'] = "0";
        $result['message'] = "error";
-       echo json_encode($result);
+        echo json_encode($result);
        exit;
-    } else {
-        $client_id = $_POST['client_id'];
-    }
+     } else {
+         $client_id = $_POST['client_id'];
+     }
+	//$client_id;
     require_once ("db_connect.php");
     $result = array();
     $result['history'] = array();
     $handwasher_ID = 0;
     $shop_ID = 0;
-        $db = DB::transact_db("SELECT * FROM laundry_transaction lt, rating r, laundry_service_provider lsp WHERE lt.trans_No = r.trans_No and lsp.lsp_ID = lt.lsp_ID and lt.client_ID = ? ORDER BY lt.trans_No DESC",
+        $db = DB::transact_db("SELECT * FROM laundry_transaction WHERE client_ID = 1 AND (trans_Status = 'Finished' OR trans_Status = 'Claimed' OR trans_Status = 'Cancelled')",
 								array($client_id ),
 								"SELECT"
                             );
         if(count($db) > 0) {
-            foreach($db as $dbs){
-            $index['rating_No'] = $dbs['rating_No'];
-            $index['shop_ID'] = $dbs['shop_ID'];
-            $index['trans_No'] = $dbs['trans_No'];
-            $index['date'] = $dbs['trans_DateOfRequest'];
-            $index['weight'] = $dbs['trans_EstWeight']; 
-            $index['handwasher_ID'] = $dbs['handwasher_ID']; 
-            $index['rating_Score'] = $dbs['rating_Score']; 
-            $index['rating_Comment'] = $dbs['rating_Comment']; 
-            $index['rating_Date'] = $dbs['rating_Date'];
-            $handwasher_ID =$dbs['handwasher_ID'];
-            $shop_ID =$dbs['shop_ID'];
-            if($shop_ID!=0){
-                $db2 = DB::transact_db("SELECT * from laundry_shop where shop_ID = ?",
-                    array($shop_ID),
-                    "SELECT"
-                );
-                if(count($db2)>0){
-                    foreach($db2 as $db2s){
-                    $index['name'] = $db2s['shop_Name'];
-                    }
-                }
-            } else if($handwasher_ID!=0){
-                $db3 = DB::transact_db("SELECT CONCAT(handwasher_FName, ' ',handwasher_MidName, ' ',handwasher_LName)AS name, handwasher_Address,handwasher_Contact  from laundry_handwasher where handwasher_ID = ?",
-                    array($handwasher_ID),
-                    "SELECT"
-                );
-                if(count($db3)>0){
-                    foreach($db3 as $db3s){
-                    $index['name'] = $db3s['name'];
-                    //$index['shop_ContactNo1'] = $db3s['trans_ExtService']; 
-                    }
-                }
-            }
-            array_push($result['history'], $index); 
-        }
+            foreach($db as $dbs)
+			{
+				$index['trans_No'] = $dbs['trans_No'];
+				$index['lsp_ID'] = $dbs['lsp_ID'];
+				$index['date'] = $dbs['trans_DateOfRequest'];
+				$index['trans_Status'] = $dbs['trans_Status'];
+				
+				$db2 = DB::transact_db("SELECT * FROM laundry_service_provider WHERE lsp_ID = ?",
+									array($dbs['lsp_ID']),
+									"SELECT"
+								);
+				if(count($db2) > 0)
+				{
+					foreach($db2 as $dbs2)
+					{
+						if($dbs2['shop_ID'] != null)
+						{
+							$db3 = DB::transact_db("SELECT shop_Name as name FROM laundry_shop WHERE shop_ID = ?",
+										array($dbs2['shop_ID']),
+										"SELECT"
+									);
+							if(count($db3) > 0)
+							{
+								foreach($db3 as $dbs3)
+								{
+									$index['name'] = $dbs3['name'];
+								}
+							}
+						}
+						else
+						{
+							$db4 = DB::transact_db("SELECT CONCAT(handwasher_FName, ' ', handwasher_MidName, ' ', handwasher_LName) AS name FROM laundry_handwasher WHERE handwasher_ID = ?",
+										array($dbs2['handwasher_ID']),
+										"SELECT"
+									);
+							if(count($db4) > 0)
+							{
+								foreach($db4 as $dbs4)
+								{
+									$index['name'] = $dbs4['name'];
+								}
+							}
+						}
+					}
+				}
+				
+				array_push($result['history'], $index); 
+			}
             $result['success'] = "1";
             $result['message'] = "success"; 
             echo json_encode($result);

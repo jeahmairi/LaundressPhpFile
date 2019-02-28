@@ -32,7 +32,7 @@ error_reporting(E_ALL);
                             array($email, md5($password)),
                             "SELECT"
                             );
-        $db3 = DB::transact_db("SELECT shop_ID, shop_Name as name FROM laundry_shop WHERE shop_Username = ? and shop_Password = ?",
+        $db3 = DB::transact_db("SELECT lp.lsp_ID, lh.shop_ID, lh.shop_Name FROM laundry_shop lh, laundry_service_provider lp WHERE lh.shop_ID = lp.shop_ID and lh.shop_Username = ? and lh.shop_Password = ?",
                             array($email, md5($password)),
                             "SELECT"
                             );
@@ -57,10 +57,10 @@ error_reporting(E_ALL);
             echo json_encode($result);
         }  else if($db3){
             $db3 = $db3[0];
-            $index3['name'] = $db3['name'];
+            $index3['name'] = $db3['shop_Name'];
             $index3['user'] = "Laundry Shop";
             $index3['id'] = $db3['shop_ID'];
-            $index2['lspid'] = $db2['lsp_ID'];
+            $index3['lspid'] = $db3['lsp_ID'];
             array_push($result['login'], $index3);
             $result['success'] = "1";
             $result['message'] = "success";

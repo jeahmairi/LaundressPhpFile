@@ -5,7 +5,7 @@ error_reporting(E_ALL);
     $result = array();
     //$result['allpostclient'] = array();
    $result['allhandwasherpost'] = array();
-        $db2 = DB::transact_db("SELECT TIMESTAMPDIFF(MINUTE,p.post_date,CURRENT_TIMESTAMP)as minute, p.post_no, p.post_message, p.post_show_location, p.client_ID, CONCAT(hw.client_FName, ' ', hw.client_MidName, ' ', hw.client_LName) AS name, hw.client_address, hw.client_Contact  FROM client_post p , laundry_client hw 
+        $db2 = DB::transact_db("SELECT TIMESTAMPDIFF(MINUTE,p.post_date,CURRENT_TIMESTAMP)as minute, p.post_no, p.post_message, p.post_show_location, p.client_ID, CONCAT(hw.client_FName, ' ', hw.client_MidName, ' ', hw.client_LName) AS name, hw.client_address, hw.client_Contact, hw.client_Photo  FROM client_post p , laundry_client hw 
                                 where p.client_ID = hw.client_ID",
                             array(),
                             "SELECT"
@@ -18,6 +18,7 @@ error_reporting(E_ALL);
             $index['post_showAddress'] = $dbs['post_show_location'];
             $index['client_Address'] = $dbs['client_address'];
             $index['client_Contact'] = $dbs['client_Contact'];
+            $index['client_Photo'] = $dbs['client_Photo'];
             $index['poster_name'] = $dbs['name'];
             array_push($result['allhandwasherpost'], $index); 
             }

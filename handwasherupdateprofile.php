@@ -23,7 +23,7 @@
             $handwasher_id = $_POST['handwasher_id'];
         }
         $path = "handwasher_image/".$fname."_".$lname.".jpeg";
-        $finalPath = "http://192.168.254.117/laundress/".$path;
+        $finalPath = "http://192.168.254.113/laundress/".$path;
 
        /*  $originalImgName= $_FILES['profilepic']['name'];
         $tempName= $_FILES['profilepic']['tmp_name'];

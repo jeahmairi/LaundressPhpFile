@@ -4,7 +4,7 @@ error_reporting(E_ALL);
     require_once ("db_connect.php");
     $result = array();
     $result['allhandwasher'] = array();
-        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lh.handwasher_Photo, lsp.lsp_ID as lsp_ID FROM laundry_handwasher lh, laundry_service_provider lsp where lh.handwasher_ID = lsp.handwasher_ID ORDER BY lh.handwasher_id",
+        $db = DB::transact_db("SELECT lh.handwasher_ID, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age, lh.handwasher_CivilStatus, lh.handwasher_Address, lh.handwasher_Contact, lh.handwasher_Photo, lsp.lsp_ID as lsp_ID FROM laundry_handwasher lh, laundry_service_provider lsp where lh.handwasher_ID = lsp.handwasher_ID and lh.handwasher_Status ='A' ORDER BY lh.handwasher_id",
 								array(),
 								"SELECT"
                             );

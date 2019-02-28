@@ -14,11 +14,15 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $result['allnotif'] = array();
     $update = "Accepted";
     $update2 = "Approved";
-    $db =  DB::transact_db("update laundry_transaction set trans_Status = ? where trans_No = ?",
-            array($update, $trans_no),
+    $date = date('Y-m-d');
+    $db =  DB::transact_db("update laundry_transaction set trans_Status = ?, trans_DateLodge = ? where trans_No = ?",
+            array($update, $date, $trans_no),
             "UPDATE");
 
     $db2 =  DB::transact_db("update notification set notification_Message = ? where trans_No = ?",
+            array($update2, $trans_no),
+            "UPDATE");
+    $db3 =  DB::transact_db("update laundry_details set detail_status = ? where trans_No = ?",
             array($update2, $trans_no),
             "UPDATE");
             $result['success'] = "1";

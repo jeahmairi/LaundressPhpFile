@@ -13,15 +13,16 @@
         $cinv_id = json_decode($_POST['cinv_id'], true);
         $noofpieces = json_decode($_POST['noofpiecess'], true);
         require_once ("db_connect.php");
-$date = date('Y-m-d');
+        $date = date('Y-m-d');
+        $status = "Pending";
         foreach($cinv_id as $cinv_ids){
             //array($serviceoffer['serviceoffered']);
                 foreach($noofpieces as $noofpiecess) {
                     $db = DB::transact_db( "INSERT INTO laundry_details
-                    (cinv_No, client_ID, detail_Count, date)
+                    (cinv_No, client_ID, detail_Count, date, detail_status)
                     values
-                    (?, ?, ?, ?)",
-                    array($cinv_ids['cinvid'], $client_id, $noofpiecess['noofpieces'], $date),
+                    (?, ?, ?, ?, ?)",
+                    array($cinv_ids['cinvid'], $client_id, $noofpiecess['noofpieces'], $date, $status),
                     "INSERT"
                     );
                     if($db)

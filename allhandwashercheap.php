@@ -4,7 +4,7 @@ error_reporting(E_ALL);
     require_once ("db_connect.php");
     $result = array();
     $result['allhandwasher'] = array();
-        $db = DB::transact_db("SELECT *, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age FROM laundry_handwasher lh, laundry_service_provider lsp, service s where lh.handwasher_ID = lsp.handwasher_ID and lsp.lsp_ID = s.lsp_ID GROUP BY lh.handwasher_ID ORDER BY s.service_Price",
+        $db = DB::transact_db("SELECT *, CONCAT(lh.handwasher_FName, ' ', lh.handwasher_MidName, ' ', lh.handwasher_LName) AS name, floor(datediff(CURRENT_DATE,lh.handwasher_BDate)/365) as age FROM laundry_handwasher lh, laundry_service_provider lsp, services_offered s where lh.handwasher_ID = lsp.handwasher_ID and lsp.lsp_ID = s.lsp_ID and lh.handwasher_Status ='A' GROUP BY lh.handwasher_ID ORDER BY s.service_offered_price",
 								array(),
 								"SELECT"
                             );
@@ -17,6 +17,8 @@ error_reporting(E_ALL);
             $index['contact'] = $dbs['handwasher_Contact'];
             $index['age'] = $dbs['age'];
             $index['civilstat'] = $dbs['handwasher_CivilStatus'];
+            $index['price'] = $dbs['service_offered_price'];
+            
             $index['lspid'] = $dbs['lsp_ID'];
             array_push($result['allhandwasher'], $index); }
             $result['success'] = "1";

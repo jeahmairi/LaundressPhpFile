@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             $index['client_ID'] = $dbs['client_ID'];
             $index['lsp_ID'] = $dbs['lsp_ID'];
             $index['client_Photo'] = $dbs['client_Photo'];
+            $index['client_Address'] = $dbs['client_Address'];
+			$index['client_Contact'] = $dbs['client_Contact'];
             $index['trans_No'] = $dbs['trans_No']; 
             $index['notification_Message'] = $dbs['notification_Message']; 
             $index['client_name'] = $dbs['name']; 

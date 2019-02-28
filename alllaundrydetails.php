@@ -28,10 +28,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             foreach($db as $dbs){
       
             $index['cinv_id'] = $dbs['cinv_No'];
-            $index['cinv_itemTag'] = $dbs['cinv_ItemTag'];
-            $index['cinv_itemBrand'] = $dbs['cinv_ItemBrand'];
-            $index['cinv_itemColor'] = $dbs['cinv_ItemColor'];
             $index['cinv_itemDescription'] = $dbs['cinv_ItemDescription'];
+            $index['cinv_Photo'] = $dbs['cinv_Photo']; 
             $index['cinv_noOfPieces'] = $dbs['cinv_NoOfPieces']; 
             array_push($result['alllaundrydetails'], $index); 
         }

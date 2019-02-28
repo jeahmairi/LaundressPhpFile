@@ -13,16 +13,17 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $result = array();
     //$result['allpostclient'] = array();
    $result['allhandwasherpost'] = array();
-        $db2 = DB::transact_db("SELECT *,CONCAT(lh.handwasher_FName, ' ',lh.handwasher_MidName, ' ',lh.handwasher_LName) AS name FROM handwasher_post hp, laundry_handwasher lh where hp.handwasher_ID = ? and hp.handwasher_ID = lh.handwasher_ID",
+   
+        $db2 = DB::transact_db("SELECT *, lh.shop_Name AS name FROM shop_post hp, laundry_shop lh where hp.shop_ID = ? and hp.shop_ID = lh.shop_ID",
                             array($handwasher_id),
                             "SELECT"
                         );
         if(count($db2) > 0) {
             foreach($db2 as $dbs){
-            $index['post_no'] = $dbs['post_handwasher_no'];
-            $index['post_message'] = $dbs['handwasher_message'];
-            $index['post_datetime'] = $dbs['handwasher_date'];
-            $index['post_show_location'] = $dbs['handwasher_show_location'];
+            $index['post_no'] = $dbs['post_shop_no'];
+            $index['post_message'] = $dbs['post_Message'];
+            $index['post_datetime'] = $dbs['post_Date'];
+            //$index['post_show_location'] = $dbs['handwasher_show_location'];
             $index['name'] = $dbs['name'];
             array_push($result['allhandwasherpost'], $index); 
             }
